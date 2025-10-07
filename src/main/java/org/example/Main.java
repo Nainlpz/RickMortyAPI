@@ -3,6 +3,8 @@ package org.example;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -34,6 +36,24 @@ public class Main {
                 .limit(30)
                 .forEach(System.out::println);
         System.out.println("---------------------------------------------------------");
+
+        System.out.println("Personajes por origen y genero: \n");
+        Map<String, Map<String, Long>> personajesOrigenGenero = allCharacters.stream()
+                .collect(Collectors.groupingBy(
+                        p -> p.getOrigin().getName(),
+                        Collectors.groupingBy(
+                                ResultsItem::getGender,
+                                Collectors.counting()
+                        )
+                ));
+
+        personajesOrigenGenero.forEach((origen, generoMap) -> {
+            System.out.println("Origen: " + origen);
+            generoMap.forEach((genero, cantidad) -> {
+                System.out.println("   Género: " + genero + " -> " + cantidad);
+            });
+            System.out.println();
+        });
 
 
     }
